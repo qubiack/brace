@@ -20256,17 +20256,22 @@ exports.EditSession = EditSession;
 exports.UndoManager = UndoManager;
 exports.version = "1.2.9";
 });
-            (function() {
-                ace.acequire(["ace/ace"], function(a) {
-                    if (a) {
-                        a.config.init(true);
-                        a.define = ace.define;
-                    }
-                    if (!window.ace)
-                        window.ace = a;
-                    for (var key in a) if (a.hasOwnProperty(key))
-                        window.ace[key] = a[key];
-                });
-            })();
-        
-module.exports = window.ace.acequire("ace/ace");
+(function() {
+    ace.acequire(["ace/ace"], function(a) {
+        if (a) {
+            a.config.init(true);
+            a.define = ace.define;
+        }
+        if (typeof window !== 'undefined' && !window.ace)
+            window.ace = a;
+        for (var key in a) if (a.hasOwnProperty(key))
+            if (typeof window !== 'undefined')
+                window.ace[key] = a[key];
+    });
+})();
+
+if (typeof window !== 'undefined') {
+    module.exports = window.ace.acequire("ace/ace");
+} else {
+    module.exports = {}
+}
